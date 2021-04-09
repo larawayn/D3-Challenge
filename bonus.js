@@ -82,7 +82,7 @@ function renderXCircles(circlesGroup, xScale, chosenXAxis, stateLabels) {
     .duration(1000)
     .attr("cx", d => xScale(d[chosenXAxis]));
 
-    stateLabels.transition()
+  stateLabels.transition()
     .duration(1000)
     .attr('x', d => xScale(d[chosenXAxis]))
 
@@ -103,7 +103,7 @@ function renderYCircles(circlesGroup, yScale, chosenYAxis, stateLabels) {
   }
 
 // function used for updating circles group with new tooltip
-function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup) {
+function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup, stateLabels) {
 
   var labelx;
   var labely;
@@ -140,15 +140,22 @@ function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup) {
     });
 
   circlesGroup.call(toolTip);
-
+  
+  
   circlesGroup.on("mouseover", toolTip.show)
     
     // onmouseout event
     .on("mouseout", toolTip.hide);
 
+
   return circlesGroup;
 };
 
+//  stateLabels.call(toolTip);
+
+//   stateLabels.on("mouseover", toolTip.show)
+
+//     .on("mouseout", toolTip.hide)
 // Retrieve data from the CSV file and execute everything below
 d3.csv("data.csv").then(function(data, err) {
   if (err) throw err;
@@ -178,6 +185,7 @@ d3.csv("data.csv").then(function(data, err) {
     .classed("x-axis", true)
     .attr("transform", `translate(0, ${height})`)
     .call(bottomAxis);
+    
 
 
   
@@ -199,15 +207,15 @@ d3.csv("data.csv").then(function(data, err) {
  
     // create state Labels
   var stateLabels = chartGroup.append("g").selectAll("states")
-  .data(data)
-  .enter()
-  .append("text")
-  .text(d => d['abbr'])
-  .attr("x", d => xLinearScale(d[chosenXAxis]))
-  .attr("y", d => yLinearScale(d[chosenYAxis]))
-  .attr("text-anchor", "middle")
-  .attr("opacity", "1")
-  .style("fill", "black");
+    .data(data)
+    .enter()
+    .append("text")
+    .text(d => d['abbr'])
+    .attr("x", d => xLinearScale(d[chosenXAxis]))
+    .attr("y", d => yLinearScale(d[chosenYAxis]))
+    .attr("text-anchor", "middle")
+    .attr("opacity", "1")
+    .style("fill", "black");
 
   // Create group for three x-axis labels
   var XlabelsGroup = chartGroup.append("g")
